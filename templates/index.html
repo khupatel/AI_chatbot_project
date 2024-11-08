@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Search Chatbot</title>
+</head>
+<body>
+    <h1>Document Search Chatbot</h1>
+    <form method="POST">
+        <input type="text" name="query" placeholder="Enter your query" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if query %}
+        <h2>Results for "{{ query }}":</h2>
+        {% if results %}
+            {% for page_num, snippet in results %}
+                <div>
+                    <h3>Page {{ page_num }}</h3>
+                    <p>{{ snippet|safe }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No relevant information found.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
