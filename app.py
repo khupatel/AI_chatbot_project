@@ -1,10 +1,10 @@
 # Document Parsing
-# pip install PyPDF2 on local terminal
 from PyPDF2 import PdfReader
 from flask import Flask, request, render_template
+from docx import Document
 
 # Open the PDF file
-file_path = "C:/Users/7849l/Desktop/test.pdf"
+file_path = "C:/Users/7849l/Desktop/test.docx"
 extracted_texts = {}
 
 # Extract text from each page
@@ -13,11 +13,20 @@ extracted_texts = {}
 # extracted text is stored by page
 
 def extract_text_from_pdf(file_path):
-    pdf_reader = PdfReader(file_path)
-    for page_num, page in enumerate(pdf_reader.pages):
-        page_text = page.extract_text()
-        # print(f"Page {page_num + 1}:\n{page_text}\n")
-        extracted_texts[page_num + 1] = page_text
+
+    if file_path.endswith(".pdf"):
+        pdf_reader = PdfReader(file_path)
+        for page_num, page in enumerate(pdf_reader.pages):
+            page_text = page.extract_text()
+            extracted_texts[page_num + 1] = page_text
+    elif file_path.endswith(".docx"):
+        doc = Document(file_path)
+        page_num = 1
+        for paragraph in doc.paragraphs:
+            if paragraph.text:
+                extracted_texts[page_num] = paragraph.text.strip().lower()
+            page_num += 1
+
     return extracted_texts
 
 # Load and preprocess the documents
